@@ -1,13 +1,17 @@
+"use client";
+
 import Navbar from "@/components/Navbar";
 import QueryClientProvider from "@/lib/providers/query";
+import { ThemeProvider } from "@/lib/providers/theme";
 import { ClerkProvider } from "@clerk/nextjs";
-import type { Metadata } from "next";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Little Free Library",
-  description: "Little Free Library Listings",
-};
+import { Red_Hat_Text } from "next/font/google";
+
+const font = Red_Hat_Text({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -15,15 +19,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <QueryClientProvider>
-        <ClerkProvider>
-          <body>
-            <Navbar />
-            {children}
+    <QueryClientProvider>
+      <html>
+        <ClerkProvider
+          appearance={{
+            layout: {
+              socialButtonsPlacement: "bottom",
+              socialButtonsVariant: "iconButton",
+            },
+          }}
+        >
+          <body className={font.className}>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <Navbar />
+              {children}
+            </ThemeProvider>
           </body>
         </ClerkProvider>
-      </QueryClientProvider>
-    </html>
+      </html>
+    </QueryClientProvider>
   );
 }

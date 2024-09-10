@@ -3,7 +3,6 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
-  console.log("hit");
   const { userId: id } = auth();
   const userId = req.nextUrl.searchParams.get("userId");
 

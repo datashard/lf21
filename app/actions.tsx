@@ -7,8 +7,6 @@
 //   const email = formData.get("email") as string;
 //   const password = formData.get("password") as string;
 
-//   console.log(formData);
-//   console.log(email, password);
 //   //   if (!email || !password) {
 //   //     throw new Error("Email and Password are required");
 //   //   }

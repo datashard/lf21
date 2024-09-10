@@ -6,25 +6,19 @@ import { Input } from "@/components/ui/input";
 import { Book, Map, MapPin, Users } from "lucide-react";
 
 export default function LandingPage() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // console.log(user);
-
   return (
     <div className="min-h-screen  ">
       <section className="py-20">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-5xl font-bold mb-4   ">
-            Discover Free Little Libraries Near You
+            Discover Little Free Libraries Near You
           </h2>
           <p className="text-xl mb-8 text-muted-foreground">
             Join our community of book lovers and share the joy of reading!
           </p>
           <div className="flex justify-center space-x-4">
             <Input placeholder="Enter your location" className="max-w-xs" />
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              Find Libraries
-            </Button>
+            <Button variant={"default"}>Find Libraries</Button>
           </div>
         </div>
       </section>
@@ -32,10 +26,10 @@ export default function LandingPage() {
       <main className="container mx-auto px-4 py-12">
         <section className="mb-20">
           <h2 className="text-3xl font-semibold mb-6 text-center">
-            What are Free Little Libraries?
+            What are Little Free Libraries?
           </h2>
           <p className="text-lg text-center max-w-2xl mx-auto text-muted-foreground">
-            Free Little Libraries are small, community-run book exchanges that
+            Little Free Libraries are small, community-run book exchanges that
             promote literacy and the love of reading. They operate on a "take a
             book, leave a book" principle, fostering a sense of community and
             sharing.
@@ -86,7 +80,7 @@ export default function LandingPage() {
           <h2 className="text-3xl font-semibold mb-10 text-center">
             Find a Little Library Near You
           </h2>
-          <div className="bg-accent aspect-video flex items-center justify-center rounded-lg overflow-hidden relative group">
+          <div className="rounded-base shadow-light dark:shadow-dark border-2 border-border dark:border-darkBorder bg-main dark:bg-mainAccent text-black dark:text-white aspect-video flex items-center justify-center rounded-base overflow-hidden relative group">
             <MapPin className="w-16 h-16 text-accent-foreground absolute transition-all duration-300 group-hover:scale-110" />
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <p className="text-white text-xl font-semibold">

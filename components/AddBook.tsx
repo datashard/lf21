@@ -1,6 +1,6 @@
 "use client";
 
-import { addLibrary } from "@/lib/pb";
+import { addBook } from "@/lib/pb";
 import { useUser } from "@clerk/nextjs";
 import { DialogClose } from "@radix-ui/react-dialog";
 import Link from "next/link";
@@ -17,26 +17,35 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-export default function AddLibrary() {
+export default function AddBook() {
   const { user } = useUser();
-  const [name, setName] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [author, setAuthor] = useState<string>("");
+  const [isbn, setISBN] = useState<string>("");
   // const [image, setImage] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (!user) return;
-    addLibrary({ name, location, description, creator_clerk_user_id: user.id });
+    const book = addBook({
+      name: title,
+      location: author,
+      description: isbn,
+      creator_clerk_user_id: user.id,
+    });
+
+    // TODO: Add Book to Library
+
+    console.log(book);
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="neutral">Add Library</Button>
+        <Button variant="neutral">Add Book</Button>
       </DialogTrigger>
       <DialogContent className="">
         <DialogHeader>
-          <DialogTitle>Add new Library</DialogTitle>
+          <DialogTitle>Add Book</DialogTitle>
           <DialogDescription>
             with this form you can add a new library to our list.
             <br />
@@ -45,47 +54,41 @@ export default function AddLibrary() {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
+            <Label htmlFor="title" className="text-right">
+              Title
             </Label>
             <Input
-              id="name"
-              placeholder="Example Library name"
+              id="title"
+              placeholder="Europa"
               className="col-span-3"
               required
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="location" className="text-right">
-              Location
+            <Label htmlFor="author" className="text-right">
+              Author
             </Label>
             <Input
-              id="location"
-              placeholder="9F5GF2X2+VX"
+              id="author"
+              placeholder="Elias J. Hurst"
               className="col-span-3"
               required
-              onChange={(e) => setLocation(e.target.value)}
+              onChange={(e) => setAuthor(e.target.value)}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="description" className="text-right">
-              Description
+            <Label htmlFor="isbn" className="text-right">
+              ISBN
             </Label>
             <Input
-              id="description"
-              placeholder="Example Library Description"
+              id="isbn"
+              placeholder="1449327486"
               className="col-span-3"
               required
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => setISBN(e.target.value)}
             />
           </div>
-          {/* <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="image" className="text-right">
-              Image
-            </Label>
-            <Input id="image" type="file" className="col-span-3" />
-          </div> */}
         </div>
         <DialogClose asChild>
           {/* @ts-ignore */}

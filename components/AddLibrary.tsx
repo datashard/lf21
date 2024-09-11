@@ -22,7 +22,6 @@ export default function AddLibrary() {
   const [name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  // const [image, setImage] = useState<string>("");
 
   const handleSubmit = () => {
     if (!user) return;
@@ -80,12 +79,6 @@ export default function AddLibrary() {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
-          {/* <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="image" className="text-right">
-              Image
-            </Label>
-            <Input id="image" type="file" className="col-span-3" />
-          </div> */}
         </div>
         <DialogClose asChild>
           <Button type="button" onClick={() => handleSubmit()}>

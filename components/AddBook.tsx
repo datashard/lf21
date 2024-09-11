@@ -1,6 +1,7 @@
 "use client";
 
-import { addBook } from "@/lib/pb";
+import useLibrary from "@/lib/hooks/useLibrary";
+import { addBookToLibrary } from "@/lib/pb";
 import { useUser } from "@clerk/nextjs";
 import { DialogClose } from "@radix-ui/react-dialog";
 import Link from "next/link";
@@ -19,6 +20,7 @@ import { Label } from "./ui/label";
 
 export default function AddBook() {
   const { user } = useUser();
+  const { selectedLibrary: library, setBookChange } = useLibrary();
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [isbn, setISBN] = useState<string>("");
@@ -26,16 +28,18 @@ export default function AddBook() {
 
   const handleSubmit = () => {
     if (!user) return;
-    const book = addBook({
-      name: title,
-      location: author,
-      description: isbn,
-      creator_clerk_user_id: user.id,
+    addBookToLibrary(
+      {
+        title,
+        author,
+        isbn,
+        creator_clerk_user_id: user.id,
+      },
+      library.id
+    ).then((res) => {
+      setBookChange(res.id);
+      console.log(res);
     });
-
-    // TODO: Add Book to Library
-
-    console.log(book);
   };
 
   return (

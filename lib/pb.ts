@@ -1,5 +1,6 @@
 "use client";
 
+import type { Book } from "@/components/ui/data-table";
 import type { User } from "@clerk/nextjs/server";
 import Pocketbase, { RecordModel } from "pocketbase";
 // import { getUsernameByID } from "./clerk";
@@ -41,21 +42,23 @@ export async function addLibrary(library: Partial<Library>) {
     .then((res) => res);
 }
 
-export async function addBook(book: Partial<Library>) {
+export async function addBook(book: Partial<Book>) {
   return pb
     .collection("books")
     .create(book)
     .then((res) => res);
 }
 
-export async function addBookToLibrary(bookId: string, libraryId: string) {
-  return pb
-    .collection("libraries_books")
-    .create({
-      book: bookId,
-      library: libraryId,
-    })
-    .then((res) => res);
+export async function addBookToLibrary(book: Partial<Book>, libraryId: string) {
+  return addBook(book).then((res) => {
+    return pb
+      .collection("libraries_books")
+      .create({
+        book: res.id,
+        library: libraryId,
+      })
+      .then((res) => res);
+  });
 }
 
 export async function getBooksInLibrary(libraryId: string) {

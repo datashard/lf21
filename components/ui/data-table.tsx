@@ -37,15 +37,16 @@ import {
 } from "@/components/ui/table";
 import useLibrary from "@/lib/hooks/useLibrary";
 import { removeBookFromLibrary } from "@/lib/pb";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { RecordModel } from "pocketbase";
 
 export interface Book extends RecordModel {
   id: string;
-  title: number;
+  title: string;
   author: string;
   isbn: string;
-  added_by?: string;
+  creator_clerk_user_id?: string;
 }
 
 export const columns: ColumnDef<Book>[] = [
@@ -96,6 +97,7 @@ export const columns: ColumnDef<Book>[] = [
     cell: ({ row }) => {
       const book = row.original;
       const { selectedLibrary: library } = useLibrary();
+      const { user } = useUser();
 
       return (
         <DropdownMenu>
@@ -107,14 +109,17 @@ export const columns: ColumnDef<Book>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => removeBookFromLibrary(library.id, book.id)}
-            >
-              Remove Book
-            </DropdownMenuItem>
+            {user && (
+              <DropdownMenuItem
+                onClick={() => removeBookFromLibrary(library.id, book.id)}
+              >
+                Remove Book
+              </DropdownMenuItem>
+            )}
             {/* <DropdownMenuSeparator /> */}
             <DropdownMenuItem>
               <Link
+                target="_blank" // open in new tab
                 href={`https://www.google.com/search?tbo=p&tbm=bks&q=isbn:${book.isbn}`}
               >
                 Search Book on Google

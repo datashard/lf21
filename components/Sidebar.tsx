@@ -1,6 +1,7 @@
 "use client";
+import useLibrary from "@/lib/hooks/useLibrary";
 import { getAllLibraries, Library } from "@/lib/pb";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { LibraryCard } from "./LibraryCard";
 import { SkeletonCard } from "./SkeletonCard";
 import { ScrollArea } from "./ui/scroll-area";
@@ -10,12 +11,18 @@ function Skeleton(length: number) {
 }
 
 export default function Sidebar() {
-  // TODO: try and refresh when new library is added
+  const { libraryChanged } = useLibrary();
+  const [libraries, setLibraries] = useState<Library[]>();
 
-  const { data: libraries } = useQuery<Library[]>({
-    queryKey: ["libraries/getAll/Sidebar"],
-    queryFn: getAllLibraries,
-  });
+  useEffect(() => {
+    try {
+      getAllLibraries().then((res) => {
+        setLibraries(res);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [libraryChanged]);
 
   return (
     <div className="flex-1 px-2 mt-5 ">

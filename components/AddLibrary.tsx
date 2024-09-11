@@ -1,5 +1,6 @@
 "use client";
 
+import useLibrary from "@/lib/hooks/useLibrary";
 import { addLibrary } from "@/lib/pb";
 import { useUser } from "@clerk/nextjs";
 import { DialogClose } from "@radix-ui/react-dialog";
@@ -19,13 +20,22 @@ import { Label } from "./ui/label";
 
 export default function AddLibrary() {
   const { user } = useUser();
+  const { setLibraryChange } = useLibrary();
   const [name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
   const handleSubmit = () => {
     if (!user) return;
-    addLibrary({ name, location, description, creator_clerk_user_id: user.id });
+    addLibrary({
+      name,
+      location,
+      description,
+      creator_clerk_user_id: user.id,
+    }).then((res) => {
+      setLibraryChange(res.id);
+      console.log(res);
+    });
   };
 
   return (

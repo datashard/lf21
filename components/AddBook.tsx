@@ -24,7 +24,7 @@ export default function AddBook() {
   const [isbn, setISBN] = useState<string>("");
   // const [image, setImage] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = () => {
     if (!user) return;
     const book = addBook({
       name: title,
@@ -91,8 +91,7 @@ export default function AddBook() {
           </div>
         </div>
         <DialogClose asChild>
-          {/* @ts-ignore */}
-          <Button type="button" onClick={(e) => handleSubmit(e)}>
+          <Button type="button" onClick={() => handleSubmit()}>
             Save changes
           </Button>
         </DialogClose>

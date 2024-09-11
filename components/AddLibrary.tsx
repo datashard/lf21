@@ -24,7 +24,7 @@ export default function AddLibrary() {
   const [description, setDescription] = useState<string>("");
   // const [image, setImage] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = () => {
     if (!user) return;
     addLibrary({ name, location, description, creator_clerk_user_id: user.id });
   };
@@ -88,8 +88,7 @@ export default function AddLibrary() {
           </div> */}
         </div>
         <DialogClose asChild>
-          {/* @ts-ignore */}
-          <Button type="button" onClick={(e) => handleSubmit(e)}>
+          <Button type="button" onClick={() => handleSubmit()}>
             Save changes
           </Button>
         </DialogClose>

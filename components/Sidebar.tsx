@@ -12,7 +12,7 @@ function Skeleton(length: number) {
 export default function Sidebar() {
   // TODO: try and refresh when new library is added
 
-  const { data: libraries, isLoading } = useQuery<Library[]>({
+  const { data: libraries } = useQuery<Library[]>({
     queryKey: ["libraries/getAll/Sidebar"],
     queryFn: getAllLibraries,
   });

@@ -1,0 +1,10 @@
+services:
+  code:
+    hostname: freel
+    image: git.lio.cat/l/ephemeral:dev
+    volumes:
+      - ../:/workspace:cached
+      - node_modules:/workspace/node_modules
+
+volumes:
+  node_modules:

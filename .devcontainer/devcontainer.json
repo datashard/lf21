@@ -1,0 +1,11 @@
+{
+    "name": "Ephemeral",
+    // "image": "git.lio.cat/l/ephemeral:dev",
+    "dockerComposeFile": "compose.yml",
+    "service": "code",
+    "workspaceFolder": "/workspace",
+    "forwardPorts": [
+        3000
+    ],
+    "postCreateCommand": "/bin/zsh .devcontainer/init.sh",
+}

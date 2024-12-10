@@ -1,11 +1,9 @@
 'use client'
 import AddLibrary from "@/components/AddLibrary";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useUser } from "@clerk/nextjs";
 
 export default function Home() {
-  const { user } = useUser()
+  const { isSignedIn } = useUser()
   return (
     <>
       <div className="flex flex-1 items-center justify-center rounded-base shadow-sm ">
@@ -15,21 +13,13 @@ export default function Home() {
           </h3>
           <p className="text-primary text-muted-foreground">
             You can select one on the left <br />
-            {user && `or Add a new one below`}
+            {isSignedIn && `or Add a new one below`}
           </p>
-          {user ? (
+          {isSignedIn ? (
             <div className="p-4">
               <AddLibrary />
             </div>
-          ) : (
-            <div className="p-4">
-              <Skeleton className="">
-                <Button>
-                  Add a Library
-                </Button>
-              </Skeleton>
-            </div>
-          )}
+          ) : undefined}
         </div>
       </div>
     </>

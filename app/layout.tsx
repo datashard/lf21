@@ -19,24 +19,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <QueryClientProvider>
-      <html>
-        <ClerkProvider
-          appearance={{
-            layout: {
-              socialButtonsPlacement: "bottom",
-              socialButtonsVariant: "iconButton",
-            },
-          }}
-        >
+    <html>
+      <ClerkProvider
+        appearance={{
+          layout: {
+            socialButtonsPlacement: "bottom",
+            socialButtonsVariant: "iconButton",
+          },
+        }}
+      >
+        <QueryClientProvider>
           <body className={font.className}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <Navbar />
               {children}
             </ThemeProvider>
           </body>
-        </ClerkProvider>
-      </html>
-    </QueryClientProvider>
+        </QueryClientProvider>
+      </ClerkProvider>
+    </html>
   );
 }

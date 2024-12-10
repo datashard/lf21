@@ -36,18 +36,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useLibrary from "@/lib/hooks/useLibrary";
-import { removeBookFromLibrary } from "@/lib/pb";
+import { Book, removeBookFromLibrary } from "@/lib/pb";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { RecordModel } from "pocketbase";
 
-export interface Book extends RecordModel {
-  id: string;
-  title: string;
-  author: string;
-  isbn: string;
-  creator_clerk_user_id?: string;
-}
 
 export const columns: ColumnDef<Book>[] = [
   {
@@ -132,7 +124,7 @@ export const columns: ColumnDef<Book>[] = [
   },
 ];
 
-export default function DataTable({ books }: { books: any[] }) {
+export default function DataTable({ books }: { books?: Book[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -142,7 +134,7 @@ export default function DataTable({ books }: { books: any[] }) {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data: books,
+    data: books || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -209,9 +201,9 @@ export default function DataTable({ books }: { books: any[] }) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}

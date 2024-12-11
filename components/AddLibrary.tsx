@@ -89,8 +89,8 @@ export default function AddLibrary() {
       addClass("location", "dark:border-green-500")
     }
     if (!validate("description", description)) {
-      addClass("location", "border-rose-500")
-      addClass("location", "dark:border-rose-500")
+      addClass("description", "border-rose-500")
+      addClass("description", "dark:border-rose-500")
     }
     else {
       removeClass("description", "border-rose-500")

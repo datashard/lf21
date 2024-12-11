@@ -39,7 +39,7 @@ import useLibrary from "@/lib/hooks/useLibrary";
 import { Book, removeBookFromLibrary } from "@/lib/pb";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-
+import { useParams } from "next/navigation";
 
 export const columns: ColumnDef<Book>[] = [
   {
@@ -88,8 +88,9 @@ export const columns: ColumnDef<Book>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const book = row.original;
-      const { selectedLibrary: library } = useLibrary();
+      const { setBookChange } = useLibrary();
       const { user } = useUser();
+      const { library } = useParams<{ library: string }>()
 
       return (
         <DropdownMenu>
@@ -103,7 +104,10 @@ export const columns: ColumnDef<Book>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             {user && (
               <DropdownMenuItem
-                onClick={() => removeBookFromLibrary(library.id, book.id)}
+                onClick={() => {
+                  removeBookFromLibrary(library, book.id)
+                  setBookChange(book.id)
+                }}
               >
                 Remove Book
               </DropdownMenuItem>

@@ -7,7 +7,7 @@ import Pocketbase, { RecordModel } from "pocketbase";
 const pb = new Pocketbase("https://wormhole.pockethost.io");
 pb.autoCancellation(false);
 
-export type Library = {
+export interface Library extends RecordModel {
   id: string;
   name: string;
   description: string;
@@ -15,7 +15,15 @@ export type Library = {
   creator_clerk_user_id: string;
   clerkUser?: User;
   image: string;
-} & RecordModel;
+}
+
+export interface Book extends RecordModel {
+  id: string;
+  title: string;
+  author: string;
+  isbn: string;
+  creator_clerk_user_id?: string;
+}
 
 export function getUsername(id: string) {
   return fetch(`/api/clerkUser?userId=${id}`, {
@@ -34,6 +42,15 @@ export async function getAllLibraries(): Promise<Library[]> {
   return libraries as unknown as Library[];
 }
 
+export async function getLibraryImage(library?: Library) {
+  if (!library) return;
+  return pb.files.getUrl(library, library.image)
+}
+
+export async function getLibrary(library: string): Promise<Library> {
+  return await pb.collection('libraries').getOne(library) as unknown as Library
+}
+
 export async function addLibrary(library: Partial<Library>) {
   return pb
     .collection("libraries")
@@ -41,24 +58,26 @@ export async function addLibrary(library: Partial<Library>) {
     .then((res) => res);
 }
 
-export async function addBook(book: Partial<Library>) {
+export async function addBook(book: Partial<Book>) {
   return pb
     .collection("books")
     .create(book)
     .then((res) => res);
 }
 
-export async function addBookToLibrary(bookId: string, libraryId: string) {
-  return pb
-    .collection("libraries_books")
-    .create({
-      book: bookId,
-      library: libraryId,
-    })
-    .then((res) => res);
+export async function addBookToLibrary(book: Partial<Book>, libraryId: string) {
+  return addBook(book).then((res) => {
+    return pb
+      .collection("libraries_books")
+      .create({
+        book: res.id,
+        library: libraryId,
+      })
+      .then((res) => res);
+  });
 }
 
-export async function getBooksInLibrary(libraryId: string) {
+export async function getBooksInLibrary(libraryId: string): Promise<Book[]> {
   const books = await pb.collection("libraries_books").getFullList({
     expand: "book",
     sort: "-created",
@@ -72,10 +91,10 @@ export async function getBooksInLibrary(libraryId: string) {
       author: book.expand?.book.author,
       isbn: book.expand?.book.isbn,
       title: book.expand?.book.title,
+      creator_clerk_user_id: book.expand?.book.creator_clerk_user_id
     };
   });
-
-  return mapped;
+  return mapped as unknown as Book[]
 }
 export async function removeBookFromLibrary(libraryId: string, bookId: string) {
   const books = await pb.collection("libraries_books").getFullList({

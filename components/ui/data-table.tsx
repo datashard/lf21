@@ -36,17 +36,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useLibrary from "@/lib/hooks/useLibrary";
-import { removeBookFromLibrary } from "@/lib/pb";
+import { Book, removeBookFromLibrary } from "@/lib/pb";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { RecordModel } from "pocketbase";
-
-export interface Book extends RecordModel {
-  id: string;
-  title: number;
-  author: string;
-  isbn: string;
-  added_by?: string;
-}
+import { useParams } from "next/navigation";
 
 export const columns: ColumnDef<Book>[] = [
   {
@@ -95,7 +88,9 @@ export const columns: ColumnDef<Book>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const book = row.original;
-      const { selectedLibrary: library } = useLibrary();
+      const { setBookChange } = useLibrary();
+      const { user } = useUser();
+      const { library } = useParams<{ library: string }>()
 
       return (
         <DropdownMenu>
@@ -107,14 +102,20 @@ export const columns: ColumnDef<Book>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => removeBookFromLibrary(library.id, book.id)}
-            >
-              Remove Book
-            </DropdownMenuItem>
+            {user && (
+              <DropdownMenuItem
+                onClick={() => {
+                  removeBookFromLibrary(library, book.id)
+                  setBookChange(book.id)
+                }}
+              >
+                Remove Book
+              </DropdownMenuItem>
+            )}
             {/* <DropdownMenuSeparator /> */}
             <DropdownMenuItem>
               <Link
+                target="_blank" // open in new tab
                 href={`https://www.google.com/search?tbo=p&tbm=bks&q=isbn:${book.isbn}`}
               >
                 Search Book on Google
@@ -127,7 +128,7 @@ export const columns: ColumnDef<Book>[] = [
   },
 ];
 
-export default function DataTable({ books }: { books: any[] }) {
+export default function DataTable({ books }: { books?: Book[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -137,7 +138,7 @@ export default function DataTable({ books }: { books: any[] }) {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data: books,
+    data: books || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -204,9 +205,9 @@ export default function DataTable({ books }: { books: any[] }) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}

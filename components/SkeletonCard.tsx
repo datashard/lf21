@@ -17,11 +17,6 @@ export function SkeletonCard() {
             <Skeleton className="h-8 w-4/6" />
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-          <Skeleton className="h-6 w-full" />
-        </div>
       </div>
     </div>
   );

@@ -8,17 +8,15 @@ interface Mark extends React.ComponentProps<typeof M> {
 }
 
 export default function Marker(props: Mark) {
-    const { setPoint, point, setLibrary } = useMap()
+    const { setPoint, setLibrary } = useMap()
     const router = useRouter()
     const onMouseOver = (e: any) => {
         setPoint(e.anchor)
         setLibrary(props.library)
-        console.log("onMouseOver", point)
     }
     const onMouseOut = () => {
         setPoint(undefined)
         setLibrary(props.library)
-        console.log("onMouseOut", point)
     }
     return (
         <>
